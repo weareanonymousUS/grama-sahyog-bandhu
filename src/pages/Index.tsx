@@ -1,7 +1,9 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { 
   Wheat, 
   Car, 
@@ -11,11 +13,14 @@ import {
   Briefcase, 
   Home, 
   Users, 
-  Phone 
+  Phone,
+  LogOut
 } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
+  const { t } = useLanguage();
 
   const sectors = [
     {
@@ -95,13 +100,22 @@ const Index = () => {
                 <Wheat className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-village-green-800">Grama Sphoorthi</h1>
+                <h1 className="text-xl font-bold text-village-green-800">{t('appName')}</h1>
                 <p className="text-sm text-village-green-600">గ్రామ స్ఫూర్తి</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="border-village-green-300 text-village-green-700">
-              తెలుగు
-            </Button>
+            <div className="flex items-center gap-3">
+              <LanguageSwitcher />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={signOut}
+                className="border-village-green-300 text-village-green-700"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
           </div>
         </div>
       </header>
