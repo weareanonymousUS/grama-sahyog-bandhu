@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,7 +19,35 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'noto': ['Noto Sans', 'sans-serif'],
+			},
 			colors: {
+				// Custom colors for Grama Sphoorthi
+				'village-green': {
+					50: '#f0fdf4',
+					100: '#dcfce7',
+					200: '#bbf7d0',
+					300: '#86efac',
+					400: '#4ade80',
+					500: '#22c55e',
+					600: '#16a34a',
+					700: '#15803d',
+					800: '#166534',
+					900: '#14532d',
+				},
+				'earth-beige': {
+					50: '#fefdf8',
+					100: '#fdf8e8',
+					200: '#f9edc2',
+					300: '#f4dc8e',
+					400: '#edc458',
+					500: '#e6af32',
+					600: '#d19928',
+					700: '#ad7b24',
+					800: '#8c6325',
+					900: '#745122',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
