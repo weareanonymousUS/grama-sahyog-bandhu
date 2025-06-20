@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      citizen_requests: {
+        Row: {
+          email: string | null
+          form_data: Json
+          id: string
+          name: string
+          phone: string
+          problem_type: string
+          sector: string
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          email?: string | null
+          form_data?: Json
+          id?: string
+          name: string
+          phone: string
+          problem_type: string
+          sector: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          email?: string | null
+          form_data?: Json
+          id?: string
+          name?: string
+          phone?: string
+          problem_type?: string
+          sector?: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null

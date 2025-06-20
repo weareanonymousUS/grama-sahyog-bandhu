@@ -3,167 +3,179 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Phone, Upload, FileText, AlertCircle } from "lucide-react";
+import { ArrowLeft, Phone, AlertCircle } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-
-interface Problem {
-  id: string;
-  title: string;
-  titleTelugu: string;
-  solutions: string[];
-  officer: {
-    name: string;
-    designation: string;
-    phone: string;
-    email: string;
-  };
-}
-
-interface SectorData {
-  title: string;
-  titleTelugu: string;
-  icon: string;
-  problems: Problem[];
-}
+import { useLanguage } from '@/contexts/LanguageContext';
+import DynamicForm from './DynamicForm';
 
 const SectorPage = () => {
   const { sectorId } = useParams();
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const [selectedProblem, setSelectedProblem] = useState<string>("");
-  const [description, setDescription] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
 
-  // Sample data - in real app, this would come from a database
-  const sectorData: Record<string, SectorData> = {
+  const sectorData: Record<string, any> = {
     agriculture: {
-      title: "Agriculture",
-      titleTelugu: "వ్యవసాయం",
+      title: { te: 'వ్యవసాయం', hi: 'कृषि', en: 'Agriculture' },
       icon: "🌾",
       problems: [
-        {
-          id: "crop-insurance",
-          title: "Crop Insurance Claims",
-          titleTelugu: "పంట బీమా క్లెయిమ్స్",
-          solutions: [
-            "PM Fasal Bima Yojana",
-            "State Crop Insurance Scheme",
-            "Revenue Department Support"
-          ],
-          officer: {
-            name: "K. Ramesh",
-            designation: "Agriculture Officer",
-            phone: "+91-9876543210",
-            email: "ramesh.agri@telangana.gov.in"
-          }
-        },
-        {
-          id: "fertilizer-shortage",
-          title: "Fertilizer Shortage",
-          titleTelugu: "ఎరువుల కొరత",
-          solutions: [
-            "Direct Benefit Transfer for Fertilizers",
-            "Cooperative Society Distribution",
-            "Organic Fertilizer Promotion"
-          ],
-          officer: {
-            name: "M. Lakshmi",
-            designation: "Assistant Director Agriculture",
-            phone: "+91-9876543211",
-            email: "lakshmi.agri@telangana.gov.in"
-          }
-        },
-        {
-          id: "irrigation-issues",
-          title: "Irrigation Problems",
-          titleTelugu: "నీటిపారుదల సమస్యలు",
-          solutions: [
-            "Mission Kakatiya - Tank Restoration",
-            "Kaleshwaram Lift Irrigation",
-            "Drip Irrigation Subsidies"
-          ],
-          officer: {
-            name: "P. Venkat",
-            designation: "Irrigation Officer",
-            phone: "+91-9876543212",
-            email: "venkat.irrigation@telangana.gov.in"
-          }
-        }
-      ]
+        { id: 'crop-insurance', title: { te: 'పంట బీమా క్లెయిమ్స్', hi: 'फसल बीमा दावे', en: 'Crop Insurance Claims' } },
+        { id: 'fertilizer-shortage', title: { te: 'ఎరువుల కొరత', hi: 'उर्वरक की कमी', en: 'Fertilizer Shortage' } },
+        { id: 'irrigation-issues', title: { te: 'నీటిపారుదల సమస్యలు', hi: 'सिंचाई की समस्याएं', en: 'Irrigation Problems' } },
+        { id: 'pest-control', title: { te: 'పెస్ట్ కంట్రోల్', hi: 'कीट नियंत्रण', en: 'Pest Control' } },
+        { id: 'market-prices', title: { te: 'మార్కెట్ ధరలు', hi: 'बाज़ार की कीमतें', en: 'Market Prices' } }
+      ],
+      officer: {
+        name: "K. Ramesh",
+        designation: "Agriculture Officer",
+        phone: "+91-9876543210",
+        email: "ramesh.agri@telangana.gov.in"
+      }
+    },
+    roads: {
+      title: { te: 'రోడ్లు & మౌలిక సదుపాయాలు', hi: 'सड़कें और अवसंरचना', en: 'Roads & Infrastructure' },
+      icon: "🛣️",
+      problems: [
+        { id: 'road-repairs', title: { te: 'రోడ్ మరమ్మతులు', hi: 'सड़क की मरम्मत', en: 'Road Repairs' } },
+        { id: 'street-lights', title: { te: 'వీధి దీపాలు', hi: 'सड़क की रोशनी', en: 'Street Lights' } },
+        { id: 'drainage-issues', title: { te: 'డ్రైనేజీ సమస్యలు', hi: 'जल निकासी की समस्याएं', en: 'Drainage Issues' } },
+        { id: 'bridge-problems', title: { te: 'వంతెన సమస్యలు', hi: 'पुल की समस्याएं', en: 'Bridge Problems' } },
+        { id: 'traffic-signals', title: { te: 'ట్రాఫిక్ సిగ్నల్స్', hi: 'ट्रैफिक सिग्नल', en: 'Traffic Signals' } }
+      ],
+      officer: {
+        name: "M. Suresh",
+        designation: "Roads & Infrastructure Officer",
+        phone: "+91-9876543211",
+        email: "suresh.roads@telangana.gov.in"
+      }
     },
     health: {
-      title: "Health",
-      titleTelugu: "ఆరోగ్యం",
+      title: { te: 'ఆరోగ్యం', hi: 'स्वास्थ्य', en: 'Health' },
       icon: "❤️",
       problems: [
-        {
-          id: "aarogyasri-card",
-          title: "Aarogyasri Card Issues",
-          titleTelugu: "ఆరోగ్యశ్రీ కార్డ్ సమస్యలు",
-          solutions: [
-            "Aarogyasri Health Care Trust",
-            "Online Application Portal",
-            "Village Health Volunteer Support"
-          ],
-          officer: {
-            name: "Dr. Sunitha",
-            designation: "District Medical Officer",
-            phone: "+91-9876543213",
-            email: "sunitha.health@telangana.gov.in"
-          }
-        }
-      ]
+        { id: 'aarogyasri-card', title: { te: 'ఆరోగ్యశ్రీ కార్డ్ సమస్యలు', hi: 'आरोग्यश्री कार्ड की समस्याएं', en: 'Aarogyasri Card Issues' } },
+        { id: 'medicine-shortage', title: { te: 'మందుల కొరత', hi: 'दवा की कमी', en: 'Medicine Shortage' } },
+        { id: 'hospital-services', title: { te: 'ఆసుపత్రి సేవలు', hi: 'अस्पताल सेवाएं', en: 'Hospital Services' } },
+        { id: 'vaccination', title: { te: 'టీకాలు', hi: 'टीकाकरण', en: 'Vaccination' } },
+        { id: 'emergency-care', title: { te: 'అత్యవసర సంరక్షణ', hi: 'आपातकालीन देखभाल', en: 'Emergency Care' } }
+      ],
+      officer: {
+        name: "Dr. Sunitha",
+        designation: "District Medical Officer",
+        phone: "+91-9876543213",
+        email: "sunitha.health@telangana.gov.in"
+      }
     },
     education: {
-      title: "Education",
-      titleTelugu: "విద్య",
+      title: { te: 'విద్య', hi: 'शिक्षा', en: 'Education' },
       icon: "🎓",
       problems: [
-        {
-          id: "school-admission",
-          title: "School Admission Issues",
-          titleTelugu: "పాఠశాల ప్రవేశ సమస్యలు",
-          solutions: [
-            "RTE Online Admission",
-            "Sarva Shiksha Abhiyan",
-            "District Education Office Support"
-          ],
-          officer: {
-            name: "B. Rajesh",
-            designation: "District Education Officer",
-            phone: "+91-9876543214",
-            email: "rajesh.education@telangana.gov.in"
-          }
-        }
-      ]
+        { id: 'school-admission', title: { te: 'పాఠశాల ప్రవేశ సమస్యలు', hi: 'स्कूल प्रवेश की समस्याएं', en: 'School Admission Issues' } },
+        { id: 'scholarship-issues', title: { te: 'స్కాలర్‌షిప్ సమస్యలు', hi: 'छात्रवृत्ति की समस्याएं', en: 'Scholarship Issues' } },
+        { id: 'fee-reimbursement', title: { te: 'ఫీజు రీయింబర్స్‌మెంట్', hi: 'शुल्क प्रतिपूर्ति', en: 'Fee Reimbursement' } },
+        { id: 'midday-meals', title: { te: 'మధ్యాహ్న భోజనం', hi: 'दोपहर का भोजन', en: 'Mid-day Meals' } },
+        { id: 'infrastructure', title: { te: 'మౌలిక సదుపాయాలు', hi: 'अवसंरचना', en: 'Infrastructure' } }
+      ],
+      officer: {
+        name: "B. Rajesh",
+        designation: "District Education Officer",
+        phone: "+91-9876543214",
+        email: "rajesh.education@telangana.gov.in"
+      }
+    },
+    electricity: {
+      title: { te: 'విద్యుత్', hi: 'बिजली', en: 'Electricity' },
+      icon: "⚡",
+      problems: [
+        { id: 'power-cuts', title: { te: 'పవర్ కట్స్', hi: 'बिजली कटौती', en: 'Power Cuts' } },
+        { id: 'bill-issues', title: { te: 'బిల్లు సమస్యలు', hi: 'बिल की समस्याएं', en: 'Bill Issues' } },
+        { id: 'new-connection', title: { te: 'కొత్త కనెక్షన్', hi: 'नया कनेक्शन', en: 'New Connection' } },
+        { id: 'meter-problems', title: { te: 'మీటర్ సమస్యలు', hi: 'मीटर की समस्याएं', en: 'Meter Problems' } },
+        { id: 'line-faults', title: { te: 'లైన్ ఫాల్ట్స్', hi: 'लाइन की खराबी', en: 'Line Faults' } }
+      ],
+      officer: {
+        name: "P. Krishna",
+        designation: "Electrical Engineer",
+        phone: "+91-9876543215",
+        email: "krishna.electrical@telangana.gov.in"
+      }
+    },
+    employment: {
+      title: { te: 'ఉపాధి', hi: 'रोजगार', en: 'Employment' },
+      icon: "💼",
+      problems: [
+        { id: 'job-card-issues', title: { te: 'జాబ్ కార్డ్ సమస్యలు', hi: 'जॉब कार्ड की समस्याएं', en: 'Job Card Issues' } },
+        { id: 'nrega-work', title: { te: 'NREGA పని', hi: 'NREGA कार्य', en: 'NREGA Work' } },
+        { id: 'skill-training', title: { te: 'నైపుణ్య శిక्षण', hi: 'कौशल प्रशिक्षण', en: 'Skill Training' } },
+        { id: 'unemployment-allowance', title: { te: 'నిరుద్యోగ భత్యం', hi: 'बेरोजगारी भत्ता', en: 'Unemployment Allowance' } },
+        { id: 'self-help-groups', title: { te: 'స్వయం సహాయక సంఘాలు', hi: 'स्व-सहायता समूह', en: 'Self Help Groups' } }
+      ],
+      officer: {
+        name: "L. Venkata Rao",
+        designation: "Employment Officer",
+        phone: "+91-9876543216",
+        email: "venkata.employment@telangana.gov.in"
+      }
+    },
+    housing: {
+      title: { te: 'గృహనిర్మాణం', hi: 'आवास', en: 'Housing' },
+      icon: "🏠",
+      problems: [
+        { id: 'house-allocation', title: { te: 'ఇల్లు కేటాయింపు', hi: 'घर आवंटन', en: 'House Allocation' } },
+        { id: 'construction-issues', title: { te: 'నిర్మాణ సమస్యలు', hi: 'निर्माण की समस्याएं', en: 'Construction Issues' } },
+        { id: 'property-documents', title: { te: 'ఆస్తి పత్రాలు', hi: 'संपत्ति दस्तावेज', en: 'Property Documents' } },
+        { id: 'subsidies', title: { te: 'సబ్సిడీలు', hi: 'सब्सिडी', en: 'Subsidies' } },
+        { id: 'land-records', title: { te: 'భూ రికార్డులు', hi: 'भूमि रिकॉर्ड', en: 'Land Records' } }
+      ],
+      officer: {
+        name: "G. Madhavi",
+        designation: "Housing Officer",
+        phone: "+91-9876543217",
+        email: "madhavi.housing@telangana.gov.in"
+      }
+    },
+    welfare: {
+      title: { te: 'మహిళలు & పిల్లల సంక్షేమం', hi: 'महिला एवं बाल कल्याण', en: 'Women & Child Welfare' },
+      icon: "👶",
+      problems: [
+        { id: 'pension-issues', title: { te: 'పెన్షన్ సమస్యలు', hi: 'पेंशन की समस्याएं', en: 'Pension Issues' } },
+        { id: 'anganwadi-services', title: { te: 'అంగన్వాడీ సేవలు', hi: 'आंगनवाड़ी सेवाएं', en: 'Anganwadi Services' } },
+        { id: 'maternity-benefits', title: { te: 'ప్రసూతి లाभాలు', hi: 'मातृत्व लाभ', en: 'Maternity Benefits' } },
+        { id: 'child-nutrition', title: { te: 'పిల్లల పోషण', hi: 'बाल पोषण', en: 'Child Nutrition' } },
+        { id: 'women-safety', title: { te: 'మహిళల భద్రత', hi: 'महिला सुरक्षा', en: 'Women Safety' } }
+      ],
+      officer: {
+        name: "S. Lakshmi",
+        designation: "Women & Child Welfare Officer",
+        phone: "+91-9876543218",
+        email: "lakshmi.welfare@telangana.gov.in"
+      }
     }
   };
 
   const currentSector = sectorId ? sectorData[sectorId] : null;
-  const selectedProblemData = currentSector?.problems.find(p => p.id === selectedProblem);
+  const selectedProblemData = currentSector?.problems.find((p: any) => p.id === selectedProblem);
 
   if (!currentSector) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Sector Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            {language === 'te' ? 'విభాగం కనుగొనబడలేదు' : 
+             language === 'hi' ? 'विभाग नहीं मिला' : 
+             'Sector Not Found'}
+          </h1>
           <Button onClick={() => navigate("/")} className="bg-village-green-600 hover:bg-village-green-700">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
+            {language === 'te' ? 'హోమ్‌కు వెనుకకు' : language === 'hi' ? 'होम पर वापस' : 'Back to Home'}
           </Button>
         </div>
       </div>
     );
   }
 
-  const handleSubmit = () => {
-    if (!selectedProblem || !description || !contactNumber) {
-      alert("Please fill all required fields");
-      return;
-    }
-    alert("Your request has been submitted successfully! You will receive an SMS confirmation shortly.");
+  const handleFormSubmit = () => {
+    navigate('/my-requests');
   };
 
   return (
@@ -178,13 +190,12 @@ const SectorPage = () => {
               className="text-village-green-700 hover:bg-village-green-50"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              Back
+              {language === 'te' ? 'వెనుకకు' : language === 'hi' ? 'वापस' : 'Back'}
             </Button>
             <div>
               <h1 className="text-xl font-bold text-village-green-800">
-                {currentSector.icon} {currentSector.title}
+                {currentSector.icon} {currentSector.title[language]}
               </h1>
-              <p className="text-sm text-village-green-600">{currentSector.titleTelugu}</p>
             </div>
           </div>
         </div>
@@ -195,18 +206,24 @@ const SectorPage = () => {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-village-green-800">
-              Select Your Problem / समस्या चुनें / సమస్యను ఎంచుకోండి
+              {language === 'te' ? 'మీ సమస్యను ఎంచుకోండి' : 
+               language === 'hi' ? 'अपनी समस्या चुनें' : 
+               'Select Your Problem'}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Select value={selectedProblem} onValueChange={setSelectedProblem}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Choose the issue you're facing..." />
+                <SelectValue placeholder={
+                  language === 'te' ? 'మీరు ఎదుర్కొంటున్న సమస్యను ఎంచుకోండి...' : 
+                  language === 'hi' ? 'आपकी समस्या चुनें...' : 
+                  'Choose the issue you\'re facing...'
+                } />
               </SelectTrigger>
               <SelectContent>
-                {currentSector.problems.map((problem) => (
+                {currentSector.problems.map((problem: any) => (
                   <SelectItem key={problem.id} value={problem.id}>
-                    {problem.title} ({problem.titleTelugu})
+                    {problem.title[language]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -214,53 +231,31 @@ const SectorPage = () => {
           </CardContent>
         </Card>
 
-        {/* Solutions Display */}
-        {selectedProblemData && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="text-village-green-800 flex items-center">
-                <AlertCircle className="w-5 h-5 mr-2" />
-                Available Solutions / उपलब्ध समाधान / అందుబాటులో ఉన్న పరిష్కారాలు
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {selectedProblemData.solutions.map((solution, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <Badge className="bg-village-green-100 text-village-green-800">
-                      {index + 1}
-                    </Badge>
-                    <span className="text-gray-700">{solution}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Contact Officer */}
         {selectedProblemData && (
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="text-village-green-800 flex items-center">
                 <Phone className="w-5 h-5 mr-2" />
-                Contact Officer / संपर्क अधिकारी / సంప్రదింపు అధికారి
+                {language === 'te' ? 'సంప్రదింపు అధికారి' : 
+                 language === 'hi' ? 'संपर्क अधिकारी' : 
+                 'Contact Officer'}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p><strong>Name:</strong> {selectedProblemData.officer.name}</p>
-                <p><strong>Designation:</strong> {selectedProblemData.officer.designation}</p>
-                <p><strong>Phone:</strong> 
-                  <a href={`tel:${selectedProblemData.officer.phone}`} 
+                <p><strong>{language === 'te' ? 'పేరు:' : language === 'hi' ? 'नाम:' : 'Name:'}</strong> {currentSector.officer.name}</p>
+                <p><strong>{language === 'te' ? 'హోదా:' : language === 'hi' ? 'पदनाम:' : 'Designation:'}</strong> {currentSector.officer.designation}</p>
+                <p><strong>{language === 'te' ? 'ఫోన్:' : language === 'hi' ? 'फोन:' : 'Phone:'}</strong> 
+                  <a href={`tel:${currentSector.officer.phone}`} 
                      className="text-village-green-600 hover:text-village-green-800 ml-2">
-                    {selectedProblemData.officer.phone}
+                    {currentSector.officer.phone}
                   </a>
                 </p>
-                <p><strong>Email:</strong> 
-                  <a href={`mailto:${selectedProblemData.officer.email}`} 
+                <p><strong>{language === 'te' ? 'ఇమెయిల్:' : language === 'hi' ? 'ईमेल:' : 'Email:'}</strong> 
+                  <a href={`mailto:${currentSector.officer.email}`} 
                      className="text-village-green-600 hover:text-village-green-800 ml-2">
-                    {selectedProblemData.officer.email}
+                    {currentSector.officer.email}
                   </a>
                 </p>
               </div>
@@ -268,72 +263,14 @@ const SectorPage = () => {
           </Card>
         )}
 
-        {/* Application Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-village-green-800 flex items-center">
-              <FileText className="w-5 h-5 mr-2" />
-              Submit Request / अनुरोध भेजें / అభ్యర్థన సమర్పించండి
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Contact Number / संपर्क नंबर / సంప్రదింపు నంబర్ *
-              </label>
-              <Input
-                type="tel"
-                value={contactNumber}
-                onChange={(e) => setContactNumber(e.target.value)}
-                placeholder="Enter your mobile number"
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Describe Your Issue / अपनी समस्या बताएं / మీ సమస్యను వివరించండి *
-              </label>
-              <Textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Please describe your problem in detail..."
-                rows={4}
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Upload Documents / दस्तावेज़ अपलोड करें / పత్రాలను అప్‌లోడ్ చేయండి
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-village-green-400 transition-colors">
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-600">
-                  Click to upload photos or documents
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Max file size: 5MB (JPG, PNG, PDF)
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
-              <Button 
-                onClick={handleSubmit}
-                className="bg-village-green-600 hover:bg-village-green-700 text-white flex-1"
-              >
-                Submit Application / आवेदन भेजें / దరఖాస్తు సమర్పించండి
-              </Button>
-              <Button 
-                variant="outline" 
-                className="border-red-300 text-red-700 hover:bg-red-50"
-              >
-                Lodge Complaint / शिकायत दर्ज करें / ఫిర్యాదు నమోదు చేయండి
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Dynamic Form */}
+        {selectedProblemData && (
+          <DynamicForm 
+            sector={sectorId!}
+            problemType={selectedProblemData.title[language]}
+            onSubmit={handleFormSubmit}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,92 +1,101 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useLanguage } from "@/contexts/LanguageContext";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { 
-  Wheat, 
-  Car, 
-  Heart, 
-  GraduationCap, 
-  Zap, 
-  Briefcase, 
-  Home, 
-  Users, 
-  Phone,
-  LogOut
-} from "lucide-react";
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { Phone, Users, FileText, TrendingUp, MapPin, Building, Heart, GraduationCap, Zap, Briefcase, Home, Baby } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
+  const { user, signOut } = useAuth();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
-  const { t } = useLanguage();
 
   const sectors = [
-    {
-      id: "agriculture",
-      title: "Agriculture",
-      titleTelugu: "వ్యవసాయం",
-      icon: Wheat,
-      color: "bg-village-green-100 hover:bg-village-green-200",
-      iconColor: "text-village-green-700"
+    { 
+      id: 'agriculture', 
+      icon: '🌾', 
+      title: language === 'te' ? 'వ్యవసాయం' : language === 'hi' ? 'कृषि' : 'Agriculture',
+      problems: ['Crop Insurance', 'Fertilizer Issues', 'Irrigation Problems', 'Pest Control', 'Market Prices']
     },
-    {
-      id: "roads",
-      title: "Roads & Infrastructure",
-      titleTelugu: "రోడ్లు మరియు మౌలిక సదుపాయాలు",
-      icon: Car,
-      color: "bg-earth-beige-100 hover:bg-earth-beige-200",
-      iconColor: "text-earth-beige-700"
+    { 
+      id: 'roads', 
+      icon: '🛣️', 
+      title: language === 'te' ? 'రోడ్లు & మౌలిక సదుపాయాలు' : language === 'hi' ? 'सड़कें और अवसंरचना' : 'Roads & Infrastructure',
+      problems: ['Road Repairs', 'Street Lights', 'Drainage Issues', 'Bridge Problems', 'Traffic Signals']
     },
-    {
-      id: "health",
-      title: "Health",
-      titleTelugu: "ఆరోగ్యం",
-      icon: Heart,
-      color: "bg-red-100 hover:bg-red-200",
-      iconColor: "text-red-700"
+    { 
+      id: 'health', 
+      icon: '❤️', 
+      title: language === 'te' ? 'ఆరోగ్యం' : language === 'hi' ? 'स्वास्थ्य' : 'Health',
+      problems: ['Aarogyasri Issues', 'Medicine Shortage', 'Hospital Services', 'Vaccination', 'Emergency Care']
     },
-    {
-      id: "education",
-      title: "Education",
-      titleTelugu: "విద్య",
-      icon: GraduationCap,
-      color: "bg-blue-100 hover:bg-blue-200",
-      iconColor: "text-blue-700"
+    { 
+      id: 'education', 
+      icon: '🎓', 
+      title: language === 'te' ? 'విద్య' : language === 'hi' ? 'शिक्षा' : 'Education',
+      problems: ['School Admission', 'Scholarship Issues', 'Fee Reimbursement', 'Mid-day Meals', 'Infrastructure']
     },
-    {
-      id: "electricity",
-      title: "Electricity",
-      titleTelugu: "విద్యుత్",
-      icon: Zap,
-      color: "bg-yellow-100 hover:bg-yellow-200",
-      iconColor: "text-yellow-700"
+    { 
+      id: 'electricity', 
+      icon: '⚡', 
+      title: language === 'te' ? 'విద్యుత్' : language === 'hi' ? 'बिजली' : 'Electricity',
+      problems: ['Power Cuts', 'Bill Issues', 'New Connection', 'Meter Problems', 'Line Faults']
     },
-    {
-      id: "employment",
-      title: "Employment",
-      titleTelugu: "ఉపాధి",
-      icon: Briefcase,
-      color: "bg-purple-100 hover:bg-purple-200",
-      iconColor: "text-purple-700"
+    { 
+      id: 'employment', 
+      icon: '💼', 
+      title: language === 'te' ? 'ఉపాధి' : language === 'hi' ? 'रोजगार' : 'Employment',
+      problems: ['Job Card Issues', 'NREGA Work', 'Skill Training', 'Unemployment Allowance', 'Self Help Groups']
     },
-    {
-      id: "housing",
-      title: "Housing",
-      titleTelugu: "గృహనిర్మాణం",
-      icon: Home,
-      color: "bg-orange-100 hover:bg-orange-200",
-      iconColor: "text-orange-700"
+    { 
+      id: 'housing', 
+      icon: '🏠', 
+      title: language === 'te' ? 'గృహనిర్మాణం' : language === 'hi' ? 'आवास' : 'Housing',
+      problems: ['House Allocation', 'Construction Issues', 'Property Documents', 'Subsidies', 'Land Records']
     },
-    {
-      id: "women-child",
-      title: "Women & Child Welfare",
-      titleTelugu: "మహిళలు మరియు పిల్లల కల్యాణం",
-      icon: Users,
-      color: "bg-pink-100 hover:bg-pink-200",
-      iconColor: "text-pink-700"
+    { 
+      id: 'welfare', 
+      icon: '👶', 
+      title: language === 'te' ? 'మహిళలు & పిల్లల సంక్షేమం' : language === 'hi' ? 'महिला एवं बाल कल्याण' : 'Women & Child Welfare',
+      problems: ['Pension Issues', 'Anganwadi Services', 'Maternity Benefits', 'Child Nutrition', 'Women Safety']
+    }
+  ];
+
+  const stats = [
+    { 
+      title: language === 'te' ? 'మొత్తం అభ్యర్థనలు' : language === 'hi' ? 'कुल अनुरोध' : 'Total Requests', 
+      value: '12,456', 
+      icon: FileText 
     },
+    { 
+      title: language === 'te' ? 'పరిష్కరించబడినవి' : language === 'hi' ? 'हल किए गए' : 'Resolved', 
+      value: '9,823', 
+      icon: TrendingUp 
+    },
+    { 
+      title: language === 'te' ? 'రిజిస్టర్డ్ యూజర్లు' : language === 'hi' ? 'पंजीकृत उपयोगकर्ता' : 'Registered Users', 
+      value: '45,678', 
+      icon: Users 
+    }
+  ];
+
+  const helplineNumbers = [
+    { 
+      title: language === 'te' ? 'ప్రధాన హెల్ప్‌లైన్' : language === 'hi' ? 'मुख्य हेल्पलाइन' : 'Main Helpline', 
+      number: '1800-425-2425' 
+    },
+    { 
+      title: language === 'te' ? 'వ్యవసాయ సహాయం' : language === 'hi' ? 'कृषि सहायता' : 'Agriculture Support', 
+      number: '1800-180-1551' 
+    },
+    { 
+      title: language === 'te' ? 'ఆరోగ్య సేవలు' : language === 'hi' ? 'स्वास्थ्य सेवाएं' : 'Health Services', 
+      number: '104' 
+    }
   ];
 
   return (
@@ -95,143 +104,129 @@ const Index = () => {
       <header className="bg-white shadow-sm border-b border-village-green-100">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-village-green-600 rounded-full flex items-center justify-center">
-                <Wheat className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-village-green-800">{t('appName')}</h1>
-                <p className="text-sm text-village-green-600">గ్రామ స్ఫూర్తి</p>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Building className="h-8 w-8 text-village-green-600" />
+                <div>
+                  <h1 className="text-xl font-bold text-village-green-800">
+                    {language === 'te' ? 'గ్రామ స్పూర్తి' : language === 'hi' ? 'ग्राम स्पूर्ति' : 'Gram Sphoorthi'}
+                  </h1>
+                  <p className="text-sm text-village-green-600">
+                    {language === 'te' ? 'పౌర సేవల పోర్టల్' : language === 'hi' ? 'नागरिक सेवा पोर्टल' : 'Citizen Services Portal'}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center space-x-4">
               <LanguageSwitcher />
               <Button 
                 variant="outline" 
-                size="sm" 
-                onClick={signOut}
-                className="border-village-green-300 text-village-green-700"
+                onClick={() => navigate('/my-requests')}
+                className="border-village-green-300 text-village-green-700 hover:bg-village-green-50"
               >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
+                {language === 'te' ? 'నా అభ్యర్థనలు' : language === 'hi' ? 'मेरे अनुरोध' : 'My Requests'}
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={signOut}
+                className="border-red-300 text-red-700 hover:bg-red-50"
+              >
+                {language === 'te' ? 'లాగ్ అవుట్' : language === 'hi' ? 'लॉग आउट' : 'Logout'}
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-12 px-4">
-        <div className="container mx-auto text-center max-w-4xl">
-          <h2 className="text-3xl md:text-5xl font-bold text-village-green-800 mb-4 leading-tight">
-            Empowering Villages.<br />
-            Direct Government Support.<br />
-            <span className="text-earth-beige-700">No Middlemen.</span>
+      {/* Welcome Section */}
+      <section className="container mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-village-green-800 mb-2">
+            {language === 'te' ? `స్వాగతం, ${user?.user_metadata?.full_name || 'పౌరుడు'}!` : 
+             language === 'hi' ? `स्वागत है, ${user?.user_metadata?.full_name || 'नागरिक'}!` : 
+             `Welcome, ${user?.user_metadata?.full_name || 'Citizen'}!`}
           </h2>
-          <p className="text-lg md:text-xl text-village-green-700 mb-2">
-            గ్రామాలను శక్తివంతం చేయడం. ప్రత్యక్ష ప్రభుత్వ మద్దతు. మధ్యవర్తులు లేరు.
+          <p className="text-village-green-600 max-w-2xl mx-auto">
+            {language === 'te' ? 'మీ సమస్యలను పరిష్కరించడానికి సరైన విభాగాన్ని ఎంచుకోండి. మేము మీకు సహాయం చేయడానికి ఇక్కడ ఉన్నాము.' :
+             language === 'hi' ? 'अपनी समस्याओं को हल करने के लिए सही विभाग चुनें। हम आपकी सहायता के लिए यहाँ हैं।' :
+             'Choose the right sector to resolve your issues. We are here to help you get the support you need.'}
           </p>
-          <p className="text-base md:text-lg text-village-green-600 mb-8">
-            Direct access to government schemes, file grievances, and request services across 8 key sectors
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-village-green-600 hover:bg-village-green-700 text-white px-8 py-3 text-lg">
-              Get Started
-            </Button>
-            <Button variant="outline" className="border-village-green-300 text-village-green-700 px-8 py-3 text-lg">
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <Card key={index} className="border-village-green-100">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
+                    <p className="text-2xl font-bold text-village-green-800">{stat.value}</p>
+                  </div>
+                  <stat.icon className="h-8 w-8 text-village-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Sectors Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {sectors.map((sector) => (
+            <Card 
+              key={sector.id} 
+              className="cursor-pointer border-village-green-100 hover:border-village-green-300 hover:shadow-lg transition-all duration-300"
+              onClick={() => navigate(`/sector/${sector.id}`)}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-center space-x-3">
+                  <span className="text-3xl">{sector.icon}</span>
+                  <CardTitle className="text-lg text-village-green-800">{sector.title}</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-1">
+                  {sector.problems.slice(0, 3).map((problem, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs bg-village-green-50 text-village-green-700">
+                      {problem}
+                    </Badge>
+                  ))}
+                  {sector.problems.length > 3 && (
+                    <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600">
+                      +{sector.problems.length - 3} more
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Helpline Numbers */}
+        <Card className="border-village-green-100">
+          <CardHeader>
+            <CardTitle className="text-village-green-800 flex items-center">
               <Phone className="w-5 h-5 mr-2" />
-              Helpline: 181
-            </Button>
-          </div>
-        </div>
+              {language === 'te' ? 'హెల్ప్‌లైన్ నంబర్లు' : language === 'hi' ? 'हेल्पलाइन नंबर' : 'Helpline Numbers'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {helplineNumbers.map((helpline, index) => (
+                <div key={index} className="text-center p-4 bg-village-green-50 rounded-lg">
+                  <p className="text-sm text-gray-600 mb-1">{helpline.title}</p>
+                  <a 
+                    href={`tel:${helpline.number}`}
+                    className="text-lg font-bold text-village-green-700 hover:text-village-green-800"
+                  >
+                    {helpline.number}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </section>
-
-      {/* Sectors Grid */}
-      <section className="py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <h3 className="text-2xl md:text-3xl font-bold text-center text-village-green-800 mb-2">
-            Choose Your Sector
-          </h3>
-          <p className="text-center text-village-green-600 mb-8">
-            మీ రంగాన్ని ఎంచుకోండి
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sectors.map((sector) => {
-              const IconComponent = sector.icon;
-              return (
-                <Card 
-                  key={sector.id}
-                  className={`${sector.color} border-0 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105`}
-                  onClick={() => navigate(`/sector/${sector.id}`)}
-                >
-                  <CardContent className="p-6 text-center">
-                    <IconComponent className={`w-12 h-12 ${sector.iconColor} mx-auto mb-4`} />
-                    <h4 className="font-semibold text-gray-800 mb-1">{sector.title}</h4>
-                    <p className="text-sm text-gray-600">{sector.titleTelugu}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-12 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <h4 className="text-3xl font-bold text-village-green-600">500+</h4>
-              <p className="text-village-green-700">Villages Connected</p>
-              <p className="text-sm text-village-green-600">అనుసంధానించబడిన గ్రామాలు</p>
-            </div>
-            <div>
-              <h4 className="text-3xl font-bold text-earth-beige-600">1000+</h4>
-              <p className="text-village-green-700">Applications Processed</p>
-              <p className="text-sm text-village-green-600">ప్రాసెస్ చేయబడిన దరఖాస్తులు</p>
-            </div>
-            <div>
-              <h4 className="text-3xl font-bold text-village-green-600">24/7</h4>
-              <p className="text-village-green-700">Support Available</p>
-              <p className="text-sm text-village-green-600">మద్దతు అందుబాటులో</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-village-green-800 text-white py-8 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h5 className="font-semibold mb-3">Quick Links</h5>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-village-green-200">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-village-green-200">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-village-green-200">Contact Us</a></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-3">Helpline Numbers</h5>
-              <ul className="space-y-2 text-sm">
-                <li>General: 181</li>
-                <li>Agriculture: 1800-425-1551</li>
-                <li>Health: 104</li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-3">Government of Telangana</h5>
-              <p className="text-sm text-village-green-200">
-                An initiative to bring government services directly to the people
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-village-green-700 mt-8 pt-4 text-center text-sm">
-            <p>&copy; 2024 Grama Sphoorthi. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

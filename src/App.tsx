@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +10,7 @@ import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import SectorPage from "./components/SectorPage";
 import Chatbot from "./components/Chatbot";
+import MyRequests from "./components/MyRequests";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +58,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <SectorPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/my-requests" 
+          element={
+            <ProtectedRoute>
+              <MyRequests />
             </ProtectedRoute>
           } 
         />
