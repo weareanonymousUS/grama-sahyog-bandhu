@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { Wheat, Phone, Mail, ArrowLeft } from 'lucide-react';
+import { Wheat, Phone, Mail, ArrowLeft, Building } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { toast } from 'sonner';
@@ -83,46 +82,33 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-village-green-50 to-earth-beige-50 font-noto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-noto">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-village-green-100 p-4">
-        <div className="flex items-center justify-between max-w-md mx-auto">
-          <div className="flex items-center space-x-3">
-            {authMode !== 'choose' && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  if (authMode === 'otp') {
-                    setAuthMode('phone');
-                  } else {
-                    setAuthMode('choose');
-                  }
-                  reset();
-                }}
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            )}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-village-green-600 rounded-full flex items-center justify-center">
-                <Wheat className="w-5 h-5 text-white" />
+      <header className="bg-white shadow-sm border-b p-4" style={{ borderBottomColor: 'rgb(29 78 216)', borderBottomWidth: 1 }}>
+        <div className="container mx-auto px-2 sm:px-4 py-0">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="flex items-center space-x-2">
+                <Building className="h-8 w-8 text-blue-600" />
+                <div>
+                  <h1 className="text-lg sm:text-xl font-bold text-blue-800">Gram Seva</h1>
+                  <p className="text-xs sm:text-sm text-blue-600">Citizen Services Portal</p>
+                </div>
               </div>
-              <span className="text-lg font-bold text-village-green-800">{t('appName')}</span>
             </div>
+            <LanguageSwitcher />
           </div>
-          <LanguageSwitcher />
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-village-green-800 mb-2">
-              {t('loginTitle')}
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-2 sm:p-4 overflow-auto">
+        <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md bg-white rounded-xl shadow-lg p-4 sm:p-8" style={{ border: '1px solid rgb(29 78 216)' }}>
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: 'rgb(31 41 55)' }}>
+              {t('loginTitle').replace('Gram Sphoorthi', 'Gram Seva')}
             </h1>
-            <p className="text-village-green-600 text-sm">
+            <p className="text-xs sm:text-sm" style={{ color: 'rgb(31 41 55)' }}>
               {t('loginSubtitle')}
             </p>
           </div>
@@ -132,22 +118,26 @@ const AuthPage = () => {
             <div className="space-y-4">
               <Button
                 onClick={() => setAuthMode('phone')}
-                className="w-full bg-village-green-600 hover:bg-village-green-700 py-6 text-lg"
+                className="w-full py-4 sm:py-6 text-base sm:text-lg"
+                style={{ backgroundColor: 'rgb(29 78 216)', color: 'white' }}
+                onMouseOver={e => (e.currentTarget.style.backgroundColor = 'rgb(30 64 175)')}
+                onMouseOut={e => (e.currentTarget.style.backgroundColor = 'rgb(29 78 216)')}
               >
                 <Phone className="w-5 h-5 mr-3" />
                 {t('continueWithPhone')}
               </Button>
               
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <div className="flex-1 border-t border-gray-200"></div>
-                <span className="text-gray-500 text-sm">{t('or')}</span>
+                <span className="text-gray-500 text-xs sm:text-sm">{t('or')}</span>
                 <div className="flex-1 border-t border-gray-200"></div>
               </div>
 
               <Button
                 onClick={() => setAuthMode('email')}
                 variant="outline"
-                className="w-full border-village-green-300 text-village-green-700 py-6 text-lg"
+                className="w-full text-village-green-700 py-4 sm:py-6 text-base sm:text-lg"
+                style={{ borderColor: 'rgb(29 78 216)' }}
               >
                 <Mail className="w-5 h-5 mr-3" />
                 {t('continueWithEmail')}
@@ -166,12 +156,13 @@ const AuthPage = () => {
                   placeholder="9876543210"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="border-village-green-200 focus:border-village-green-500"
+                  style={{ borderColor: 'rgb(29 78 216)' }}
+                  className="focus:!border-[rgb(29,78,216)] text-base"
                 />
               </div>
               <Button
                 onClick={handlePhoneSubmit}
-                className="w-full bg-village-green-600 hover:bg-village-green-700"
+                className="w-full bg-village-green-600 hover:bg-village-green-700 py-3 text-base"
               >
                 {t('sendOTP')}
               </Button>
@@ -182,7 +173,7 @@ const AuthPage = () => {
           {authMode === 'otp' && (
             <div className="space-y-6">
               <div className="text-center">
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-xs sm:text-sm text-gray-600 mb-4">
                   {t('enterOTP')}
                 </p>
                 <InputOTP
@@ -200,7 +191,7 @@ const AuthPage = () => {
               </div>
               <Button
                 onClick={handleOTPVerify}
-                className="w-full bg-village-green-600 hover:bg-village-green-700"
+                className="w-full bg-village-green-600 hover:bg-village-green-700 py-3 text-base"
                 disabled={otpValue.length !== 6}
               >
                 {t('verifyOTP')}
@@ -217,10 +208,11 @@ const AuthPage = () => {
                   <Input
                     id="fullName"
                     {...register('fullName', { required: 'Full name is required' })}
-                    className="border-village-green-200 focus:border-village-green-500"
+                    style={{ borderColor: 'rgb(29 78 216)' }}
+                    className="focus:!border-[rgb(29,78,216)] text-base"
                   />
                   {errors.fullName && (
-                    <p className="text-red-500 text-sm">{errors.fullName.message as string}</p>
+                    <p className="text-red-500 text-xs sm:text-sm">{errors.fullName.message as string}</p>
                   )}
                 </div>
               )}
@@ -231,10 +223,11 @@ const AuthPage = () => {
                   id="email"
                   type="email"
                   {...register('email', { required: 'Email is required' })}
-                  className="border-village-green-200 focus:border-village-green-500"
+                  style={{ borderColor: 'rgb(29 78 216)' }}
+                  className="focus:!border-[rgb(29,78,216)] text-base"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message as string}</p>
+                  <p className="text-red-500 text-xs sm:text-sm">{errors.email.message as string}</p>
                 )}
               </div>
 
@@ -244,16 +237,20 @@ const AuthPage = () => {
                   id="password"
                   type="password"
                   {...register('password', { required: 'Password is required', minLength: 6 })}
-                  className="border-village-green-200 focus:border-village-green-500"
+                  style={{ borderColor: 'rgb(29 78 216)' }}
+                  className="focus:!border-[rgb(29,78,216)] text-base"
                 />
                 {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password.message as string}</p>
+                  <p className="text-red-500 text-xs sm:text-sm">{errors.password.message as string}</p>
                 )}
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-village-green-600 hover:bg-village-green-700"
+                className="w-full py-3 text-base"
+                style={{ backgroundColor: 'rgb(29 78 216)', color: 'white' }}
+                onMouseOver={e => (e.currentTarget.style.backgroundColor = 'rgb(30 64 175)')}
+                onMouseOut={e => (e.currentTarget.style.backgroundColor = 'rgb(29 78 216)')}
               >
                 {formMode === 'signin' ? t('signIn') : t('signUp')}
               </Button>
@@ -265,7 +262,7 @@ const AuthPage = () => {
                     setFormMode(formMode === 'signin' ? 'signup' : 'signin');
                     reset();
                   }}
-                  className="text-village-green-600 hover:text-village-green-700 text-sm"
+                  className="text-village-green-600 hover:text-village-green-700 text-xs sm:text-sm"
                 >
                   {formMode === 'signin' ? t('newUser') : t('existingUser')}
                 </button>

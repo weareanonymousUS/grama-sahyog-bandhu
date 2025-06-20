@@ -225,13 +225,16 @@ const SectorPage = () => {
                     {problem.title[language]}
                   </SelectItem>
                 ))}
+                <SelectItem key="others" value="others">
+                  {language === 'te' ? 'ఇతర' : language === 'hi' ? 'अन्य' : 'Others'}
+                </SelectItem>
               </SelectContent>
             </Select>
           </CardContent>
         </Card>
 
         {/* Contact Officer */}
-        {selectedProblemData && (
+        {selectedProblem && selectedProblem !== 'others' && selectedProblemData && (
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="text-blue-800 flex items-center">
@@ -263,10 +266,10 @@ const SectorPage = () => {
         )}
 
         {/* Dynamic Form */}
-        {selectedProblemData && (
+        {(selectedProblemData || selectedProblem === 'others') && (
           <DynamicForm 
             sector={sectorId!}
-            problemType={selectedProblemData.title[language]}
+            problemType={selectedProblem === 'others' ? (language === 'te' ? 'ఇతర' : language === 'hi' ? 'अन्य' : 'Others') : selectedProblemData.title[language]}
             onSubmit={handleFormSubmit}
           />
         )}
