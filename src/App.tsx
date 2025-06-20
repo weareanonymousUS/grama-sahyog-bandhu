@@ -6,10 +6,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import Index from "./pages/Index";
+import WelcomePage from "./pages/WelcomePage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
+import ProfilePage from "./pages/ProfilePage";
+import SectorSelectionPage from "./pages/SectorSelectionPage";
 import SectorPage from "./components/SectorPage";
+import SuccessPage from "./pages/SuccessPage";
 import Chatbot from "./components/Chatbot";
 import MyRequests from "./components/MyRequests";
 
@@ -20,10 +23,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-village-green-50 to-earth-beige-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-village-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-village-green-600">Loading...</p>
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-blue-600">Loading...</p>
         </div>
       </div>
     );
@@ -50,7 +53,23 @@ const AppContent = () => {
           path="/" 
           element={
             <ProtectedRoute>
-              <Index />
+              <WelcomePage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/sectors" 
+          element={
+            <ProtectedRoute>
+              <SectorSelectionPage />
             </ProtectedRoute>
           } 
         />
@@ -59,6 +78,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <SectorPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/success" 
+          element={
+            <ProtectedRoute>
+              <SuccessPage />
             </ProtectedRoute>
           } 
         />

@@ -9,6 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      agriculture_requests: {
+        Row: {
+          crop_type: string | null
+          description: string
+          documents: Json | null
+          email: string | null
+          id: string
+          land_area: number | null
+          location: string | null
+          name: string
+          phone: string
+          problem_type: string
+          status: string | null
+          submitted_at: string | null
+          survey_number: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          crop_type?: string | null
+          description: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          land_area?: number | null
+          location?: string | null
+          name: string
+          phone: string
+          problem_type: string
+          status?: string | null
+          submitted_at?: string | null
+          survey_number?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          crop_type?: string | null
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          land_area?: number | null
+          location?: string | null
+          name?: string
+          phone?: string
+          problem_type?: string
+          status?: string | null
+          submitted_at?: string | null
+          survey_number?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       citizen_requests: {
         Row: {
           email: string | null
@@ -51,6 +105,264 @@ export type Database = {
         }
         Relationships: []
       }
+      education_requests: {
+        Row: {
+          academic_year: string | null
+          class: string | null
+          description: string
+          documents: Json | null
+          email: string | null
+          id: string
+          name: string
+          phone: string
+          problem_type: string
+          school_name: string | null
+          status: string | null
+          student_name: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          academic_year?: string | null
+          class?: string | null
+          description: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          name: string
+          phone: string
+          problem_type: string
+          school_name?: string | null
+          status?: string | null
+          student_name?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          academic_year?: string | null
+          class?: string | null
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          name?: string
+          phone?: string
+          problem_type?: string
+          school_name?: string | null
+          status?: string | null
+          student_name?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      electricity_requests: {
+        Row: {
+          consumer_number: string | null
+          description: string
+          documents: Json | null
+          email: string | null
+          id: string
+          issue_type: string | null
+          location: string
+          name: string
+          phone: string
+          problem_type: string
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          consumer_number?: string | null
+          description: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          issue_type?: string | null
+          location: string
+          name: string
+          phone: string
+          problem_type: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          consumer_number?: string | null
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          issue_type?: string | null
+          location?: string
+          name?: string
+          phone?: string
+          problem_type?: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      employment_requests: {
+        Row: {
+          description: string
+          documents: Json | null
+          email: string | null
+          id: string
+          job_card_number: string | null
+          name: string
+          phone: string
+          problem_type: string
+          skill_area: string | null
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+          work_type: string | null
+        }
+        Insert: {
+          description: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          job_card_number?: string | null
+          name: string
+          phone: string
+          problem_type: string
+          skill_area?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+          work_type?: string | null
+        }
+        Update: {
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          job_card_number?: string | null
+          name?: string
+          phone?: string
+          problem_type?: string
+          skill_area?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+          work_type?: string | null
+        }
+        Relationships: []
+      }
+      health_requests: {
+        Row: {
+          description: string
+          documents: Json | null
+          email: string | null
+          hospital_name: string | null
+          id: string
+          name: string
+          patient_age: number | null
+          phone: string
+          problem_type: string
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          urgency_level: string | null
+          user_id: string
+        }
+        Insert: {
+          description: string
+          documents?: Json | null
+          email?: string | null
+          hospital_name?: string | null
+          id?: string
+          name: string
+          patient_age?: number | null
+          phone: string
+          problem_type: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          urgency_level?: string | null
+          user_id: string
+        }
+        Update: {
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          hospital_name?: string | null
+          id?: string
+          name?: string
+          patient_age?: number | null
+          phone?: string
+          problem_type?: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          urgency_level?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      housing_requests: {
+        Row: {
+          construction_type: string | null
+          description: string
+          documents: Json | null
+          email: string | null
+          family_size: number | null
+          id: string
+          name: string
+          phone: string
+          plot_number: string | null
+          problem_type: string
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          construction_type?: string | null
+          description: string
+          documents?: Json | null
+          email?: string | null
+          family_size?: number | null
+          id?: string
+          name: string
+          phone: string
+          plot_number?: string | null
+          problem_type: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          construction_type?: string | null
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          family_size?: number | null
+          id?: string
+          name?: string
+          phone?: string
+          plot_number?: string | null
+          problem_type?: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -81,6 +393,108 @@ export type Database = {
           preferred_language?: string | null
           updated_at?: string | null
           village?: string | null
+        }
+        Relationships: []
+      }
+      roads_infrastructure_requests: {
+        Row: {
+          description: string
+          documents: Json | null
+          email: string | null
+          id: string
+          location: string
+          name: string
+          phone: string
+          problem_type: string
+          road_type: string | null
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          urgency_level: string | null
+          user_id: string
+        }
+        Insert: {
+          description: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          location: string
+          name: string
+          phone: string
+          problem_type: string
+          road_type?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          urgency_level?: string | null
+          user_id: string
+        }
+        Update: {
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          location?: string
+          name?: string
+          phone?: string
+          problem_type?: string
+          road_type?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          urgency_level?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      welfare_requests: {
+        Row: {
+          beneficiary_age: number | null
+          beneficiary_name: string | null
+          description: string
+          documents: Json | null
+          email: string | null
+          id: string
+          name: string
+          phone: string
+          problem_type: string
+          service_type: string | null
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          beneficiary_age?: number | null
+          beneficiary_name?: string | null
+          description: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          name: string
+          phone: string
+          problem_type: string
+          service_type?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          beneficiary_age?: number | null
+          beneficiary_name?: string | null
+          description?: string
+          documents?: Json | null
+          email?: string | null
+          id?: string
+          name?: string
+          phone?: string
+          problem_type?: string
+          service_type?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }

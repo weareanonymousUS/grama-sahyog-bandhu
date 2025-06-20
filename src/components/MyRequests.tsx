@@ -10,21 +10,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-interface CitizenRequest {
+interface RequestItem {
   id: string;
   name: string;
   phone: string;
   email?: string;
-  sector: string;
   problem_type: string;
-  form_data: any;
   status: string;
   submitted_at: string;
-  updated_at: string;
+  sector?: string;
+  description?: string;
+  location?: string;
 }
 
 const MyRequests = () => {
-  const [requests, setRequests] = useState<CitizenRequest[]>([]);
+  const [requests, setRequests] = useState<RequestItem[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { language } = useLanguage();
@@ -52,27 +52,56 @@ const MyRequests = () => {
   }, [user]);
 
   const fetchRequests = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('citizen_requests')
-        .select('*')
-        .order('submitted_at', { ascending: false });
+    if (!user) return;
 
-      if (error) {
-        console.error('Error fetching requests:', error);
-        toast({
-          title: language === 'te' ? 'లోపం' : language === 'hi' ? 'त्रुटि' : 'Error',
-          description: language === 'te' ? 'అభ్యర్థనలను లోడ్ చేయడంలో లోపం' : 
-                      language === 'hi' ? 'अनुरोध लोड करने में त्रुटि' : 
-                      'Error loading requests',
-          variant: 'destructive'
-        });
-        return;
+    try {
+      const tableNames = [
+        'agriculture_requests',
+        'roads_infrastructure_requests', 
+        'health_requests',
+        'education_requests',
+        'electricity_requests',
+        'employment_requests',
+        'housing_requests',
+        'welfare_requests'
+      ];
+
+      const allRequests: RequestItem[] = [];
+
+      for (const tableName of tableNames) {
+        const { data, error } = await supabase
+          .from(tableName)
+          .select('*')
+          .eq('user_id', user.id)
+          .order('submitted_at', { ascending: false });
+
+        if (error) {
+          console.error(`Error fetching ${tableName}:`, error);
+          continue;
+        }
+
+        if (data) {
+          const sectorName = tableName.replace('_requests', '').replace('roads_infrastructure', 'roads');
+          const formattedData = data.map(item => ({
+            ...item,
+            sector: sectorName
+          }));
+          allRequests.push(...formattedData);
+        }
       }
 
-      setRequests(data || []);
+      // Sort all requests by submitted_at
+      allRequests.sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
+      setRequests(allRequests);
     } catch (error) {
       console.error('Error:', error);
+      toast({
+        title: language === 'te' ? 'లోపం' : language === 'hi' ? 'त्रुटि' : 'Error',
+        description: language === 'te' ? 'అభ్యర్థనలను లోడ్ చేయడంలో లోపం' : 
+                    language === 'hi' ? 'अनुरोध लोड करने में त्रुटि' : 
+                    'Error loading requests',
+        variant: 'destructive'
+      });
     } finally {
       setLoading(false);
     }
@@ -88,12 +117,26 @@ const MyRequests = () => {
     });
   };
 
+  const getSectorDisplayName = (sector: string) => {
+    const sectorNames = {
+      agriculture: { te: 'వ్యవసాయం', hi: 'कृषि', en: 'Agriculture' },
+      roads: { te: 'రోడ్లు', hi: 'सड़कें', en: 'Roads' },
+      health: { te: 'ఆరోగ్యం', hi: 'स्वास्थ्य', en: 'Health' },
+      education: { te: 'విద్య', hi: 'शिक्षा', en: 'Education' },
+      electricity: { te: 'విద్యుత్', hi: 'बिजली', en: 'Electricity' },
+      employment: { te: 'ఉపాధి', hi: 'रोजगार', en: 'Employment' },
+      housing: { te: 'గృహనిర్మాణం', hi: 'आवास', en: 'Housing' },
+      welfare: { te: 'సంక్షేమం', hi: 'कल्याण', en: 'Welfare' }
+    };
+    return sectorNames[sector as keyof typeof sectorNames]?.[language] || sector;
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-village-green-50 to-earth-beige-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-village-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-village-green-600">
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-blue-600">
             {language === 'te' ? 'లోడ్ అవుతోంది...' : 
              language === 'hi' ? 'लोड हो रहा है...' : 
              'Loading...'}
@@ -104,21 +147,21 @@ const MyRequests = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-village-green-50 to-earth-beige-50 font-noto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-noto">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-village-green-100">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
             <Button 
               variant="ghost" 
               onClick={() => navigate("/")}
-              className="text-village-green-700 hover:bg-village-green-50"
+              className="text-blue-700 hover:bg-blue-50"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               {language === 'te' ? 'వెనుకకు' : language === 'hi' ? 'वापस' : 'Back'}
             </Button>
             <div>
-              <h1 className="text-xl font-bold text-village-green-800">
+              <h1 className="text-xl font-bold text-blue-800">
                 {language === 'te' ? 'నా అభ్యర్థనలు' : 
                  language === 'hi' ? 'मेरे अनुरोध' : 
                  'My Requests'}
@@ -150,7 +193,7 @@ const MyRequests = () => {
                    'You haven\'t submitted any requests yet'}
                 </p>
               </div>
-              <Button onClick={() => navigate('/')} className="bg-village-green-600 hover:bg-village-green-700">
+              <Button onClick={() => navigate('/sectors')} className="bg-blue-600 hover:bg-blue-700">
                 {language === 'te' ? 'అభ్యర్థన సమర్పించండి' : 
                  language === 'hi' ? 'अनुरोध सबमिट करें' : 
                  'Submit a Request'}
@@ -164,11 +207,11 @@ const MyRequests = () => {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle className="text-lg font-semibold text-village-green-800 mb-2">
+                      <CardTitle className="text-lg font-semibold text-blue-800 mb-2">
                         {request.problem_type}
                       </CardTitle>
                       <Badge variant="secondary" className="mb-2">
-                        {request.sector}
+                        {getSectorDisplayName(request.sector || '')}
                       </Badge>
                     </div>
                     <Badge className={statusColors[request.status as keyof typeof statusColors]}>
@@ -192,22 +235,22 @@ const MyRequests = () => {
                         {request.email}
                       </div>
                     )}
-                    {request.form_data?.location && (
+                    {request.location && (
                       <div className="flex items-center text-sm text-gray-600">
                         <MapPin className="w-4 h-4 mr-2" />
-                        {request.form_data.location}
+                        {request.location}
                       </div>
                     )}
                   </div>
                   
-                  {request.form_data?.description && (
+                  {request.description && (
                     <div className="bg-gray-50 p-3 rounded-lg">
                       <h4 className="font-medium text-sm text-gray-700 mb-1">
                         {language === 'te' ? 'వివరణ:' : 
                          language === 'hi' ? 'विवरण:' : 
                          'Description:'}
                       </h4>
-                      <p className="text-sm text-gray-600">{request.form_data.description}</p>
+                      <p className="text-sm text-gray-600">{request.description}</p>
                     </div>
                   )}
                 </CardContent>

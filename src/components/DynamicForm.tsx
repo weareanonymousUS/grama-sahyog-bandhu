@@ -1,15 +1,15 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Upload, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import DocumentUpload from './DocumentUpload';
 
 interface DynamicFormProps {
   sector: string;
@@ -22,6 +22,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
   const { language } = useLanguage();
   const { toast } = useToast();
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const [documents, setDocuments] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getFormFields = () => {
@@ -224,24 +225,80 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const getTableName = (sector: string) => {
+    const tableMap: Record<string, string> = {
+      agriculture: 'agriculture_requests',
+      roads: 'roads_infrastructure_requests',
+      health: 'health_requests',
+      education: 'education_requests',
+      electricity: 'electricity_requests',
+      employment: 'employment_requests',
+      housing: 'housing_requests',
+      welfare: 'welfare_requests'
+    };
+    return tableMap[sector] || 'citizen_requests';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
     setIsSubmitting(true);
     try {
+      const tableName = getTableName(sector);
+      
+      // Prepare data based on sector
+      const requestData: any = {
+        user_id: user.id,
+        name: formData.fullName,
+        phone: formData.phoneNumber,
+        email: formData.email || null,
+        problem_type: problemType,
+        description: formData.description,
+        documents: documents,
+        status: 'pending'
+      };
+
+      // Add sector-specific fields
+      if (sector === 'agriculture') {
+        requestData.land_area = formData.landArea;
+        requestData.crop_type = formData.cropType;
+        requestData.survey_number = formData.surveyNumber;
+        requestData.location = formData.location;
+      } else if (sector === 'roads') {
+        requestData.location = formData.location;
+        requestData.road_type = formData.roadType;
+        requestData.urgency_level = formData.urgencyLevel;
+      } else if (sector === 'health') {
+        requestData.patient_age = formData.patientAge;
+        requestData.hospital_name = formData.hospitalName;
+        requestData.urgency_level = formData.urgencyLevel;
+      } else if (sector === 'education') {
+        requestData.student_name = formData.studentName;
+        requestData.school_name = formData.schoolName;
+        requestData.class = formData.class;
+        requestData.academic_year = formData.academicYear;
+      } else if (sector === 'electricity') {
+        requestData.consumer_number = formData.consumerNumber;
+        requestData.location = formData.location;
+        requestData.issue_type = formData.issueType;
+      } else if (sector === 'employment') {
+        requestData.job_card_number = formData.jobCardNumber;
+        requestData.skill_area = formData.skillArea;
+        requestData.work_type = formData.workType;
+      } else if (sector === 'housing') {
+        requestData.plot_number = formData.plotNumber;
+        requestData.construction_type = formData.constructionType;
+        requestData.family_size = formData.familySize;
+      } else if (sector === 'welfare') {
+        requestData.beneficiary_name = formData.beneficiaryName;
+        requestData.beneficiary_age = formData.beneficiaryAge;
+        requestData.service_type = formData.serviceType;
+      }
+
       const { error } = await supabase
-        .from('citizen_requests')
-        .insert({
-          user_id: user.id,
-          name: formData.fullName,
-          phone: formData.phoneNumber,
-          email: formData.email || null,
-          sector,
-          problem_type: problemType,
-          form_data: formData,
-          status: 'pending'
-        });
+        .from(tableName)
+        .insert(requestData);
 
       if (error) throw error;
 
@@ -310,7 +367,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-village-green-800 flex items-center">
+        <CardTitle className="text-blue-800 flex items-center">
           <FileText className="w-5 h-5 mr-2" />
           {language === 'te' ? 'అభ్యర్థన వివరాలు' : language === 'hi' ? 'अनुरोध विवरण' : 'Request Details'}
         </CardTitle>
@@ -326,29 +383,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
             </div>
           ))}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {language === 'te' ? 'సహాయక పత్రాలు' : language === 'hi' ? 'सहायक दस्तावेज़' : 'Supporting Documents'}
-            </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-village-green-400 transition-colors">
-              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">
-                {language === 'te' ? 'ఫైల్స్ అప్‌లోడ్ చేయడానికి క్లిక్ చేయండి' : 
-                 language === 'hi' ? 'फाइलें अपलोड करने के लिए क्लिक करें' : 
-                 'Click to upload files'}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {language === 'te' ? 'గరిష్ట ఫైల్ పరిమాణం: 5MB (JPG, PNG, PDF)' : 
-                 language === 'hi' ? 'अधिकतम फाइल आकार: 5MB (JPG, PNG, PDF)' : 
-                 'Max file size: 5MB (JPG, PNG, PDF)'}
-              </p>
-            </div>
-          </div>
+          <DocumentUpload 
+            documents={documents}
+            onDocumentsChange={setDocuments}
+          />
 
           <Button 
             type="submit" 
             disabled={isSubmitting}
-            className="w-full bg-village-green-600 hover:bg-village-green-700"
+            className="w-full bg-blue-600 hover:bg-blue-700"
           >
             {isSubmitting ? 
               (language === 'te' ? 'సమర్పిస్తోంది...' : language === 'hi' ? 'सबमिट कर रहे हैं...' : 'Submitting...') :

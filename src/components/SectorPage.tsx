@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Phone, AlertCircle } from "lucide-react";
+import { ArrowLeft, Phone } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from '@/contexts/LanguageContext';
 import DynamicForm from './DynamicForm';
@@ -106,7 +105,7 @@ const SectorPage = () => {
       problems: [
         { id: 'job-card-issues', title: { te: 'జాబ్ కార్డ్ సమస్యలు', hi: 'जॉब कार्ड की समस्याएं', en: 'Job Card Issues' } },
         { id: 'nrega-work', title: { te: 'NREGA పని', hi: 'NREGA कार्य', en: 'NREGA Work' } },
-        { id: 'skill-training', title: { te: 'నైపుణ్య శిక्षण', hi: 'कौशल प्रशिक्षण', en: 'Skill Training' } },
+        { id: 'skill-training', title: { te: 'నైపుణ్య శిక्षణ', hi: 'कौशल प्रशिक्षण', en: 'Skill Training' } },
         { id: 'unemployment-allowance', title: { te: 'నిరుద్యోగ భత్యం', hi: 'बेरोजगारी भत्ता', en: 'Unemployment Allowance' } },
         { id: 'self-help-groups', title: { te: 'స్వయం సహాయక సంఘాలు', hi: 'स्व-सहायता समूह', en: 'Self Help Groups' } }
       ],
@@ -140,8 +139,8 @@ const SectorPage = () => {
       problems: [
         { id: 'pension-issues', title: { te: 'పెన్షన్ సమస్యలు', hi: 'पेंशन की समस्याएं', en: 'Pension Issues' } },
         { id: 'anganwadi-services', title: { te: 'అంగన్వాడీ సేవలు', hi: 'आंगनवाड़ी सेवाएं', en: 'Anganwadi Services' } },
-        { id: 'maternity-benefits', title: { te: 'ప్రసూతి లाभాలు', hi: 'मातृत्व लाभ', en: 'Maternity Benefits' } },
-        { id: 'child-nutrition', title: { te: 'పిల్లల పోషण', hi: 'बाल पोषण', en: 'Child Nutrition' } },
+        { id: 'maternity-benefits', title: { te: 'ప్రసూతి లाభాలు', hi: 'मातृत्व लाभ', en: 'Maternity Benefits' } },
+        { id: 'child-nutrition', title: { te: 'పిల్లల పోషణ', hi: 'बाल पोषण', en: 'Child Nutrition' } },
         { id: 'women-safety', title: { te: 'మహిళల భద్రత', hi: 'महिला सुरक्षा', en: 'Women Safety' } }
       ],
       officer: {
@@ -165,9 +164,9 @@ const SectorPage = () => {
              language === 'hi' ? 'विभाग नहीं मिला' : 
              'Sector Not Found'}
           </h1>
-          <Button onClick={() => navigate("/")} className="bg-village-green-600 hover:bg-village-green-700">
+          <Button onClick={() => navigate("/sectors")} className="bg-blue-600 hover:bg-blue-700">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {language === 'te' ? 'హోమ్‌కు వెనుకకు' : language === 'hi' ? 'होम पर वापस' : 'Back to Home'}
+            {language === 'te' ? 'వెనుకకు' : language === 'hi' ? 'वापस' : 'Back'}
           </Button>
         </div>
       </div>
@@ -175,25 +174,25 @@ const SectorPage = () => {
   }
 
   const handleFormSubmit = () => {
-    navigate('/my-requests');
+    navigate('/success');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-village-green-50 to-earth-beige-50 font-noto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-noto">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-village-green-100">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
             <Button 
               variant="ghost" 
-              onClick={() => navigate("/")}
-              className="text-village-green-700 hover:bg-village-green-50"
+              onClick={() => navigate("/sectors")}
+              className="text-blue-700 hover:bg-blue-50"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               {language === 'te' ? 'వెనుకకు' : language === 'hi' ? 'वापस' : 'Back'}
             </Button>
             <div>
-              <h1 className="text-xl font-bold text-village-green-800">
+              <h1 className="text-xl font-bold text-blue-800">
                 {currentSector.icon} {currentSector.title[language]}
               </h1>
             </div>
@@ -205,7 +204,7 @@ const SectorPage = () => {
         {/* Problem Selection */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-village-green-800">
+            <CardTitle className="text-blue-800">
               {language === 'te' ? 'మీ సమస్యను ఎంచుకోండి' : 
                language === 'hi' ? 'अपनी समस्या चुनें' : 
                'Select Your Problem'}
@@ -235,7 +234,7 @@ const SectorPage = () => {
         {selectedProblemData && (
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle className="text-village-green-800 flex items-center">
+              <CardTitle className="text-blue-800 flex items-center">
                 <Phone className="w-5 h-5 mr-2" />
                 {language === 'te' ? 'సంప్రదింపు అధికారి' : 
                  language === 'hi' ? 'संपर्क अधिकारी' : 
@@ -248,13 +247,13 @@ const SectorPage = () => {
                 <p><strong>{language === 'te' ? 'హోదా:' : language === 'hi' ? 'पदनाम:' : 'Designation:'}</strong> {currentSector.officer.designation}</p>
                 <p><strong>{language === 'te' ? 'ఫోన్:' : language === 'hi' ? 'फोन:' : 'Phone:'}</strong> 
                   <a href={`tel:${currentSector.officer.phone}`} 
-                     className="text-village-green-600 hover:text-village-green-800 ml-2">
+                     className="text-blue-600 hover:text-blue-800 ml-2">
                     {currentSector.officer.phone}
                   </a>
                 </p>
                 <p><strong>{language === 'te' ? 'ఇమెయిల్:' : language === 'hi' ? 'ईमेल:' : 'Email:'}</strong> 
                   <a href={`mailto:${currentSector.officer.email}`} 
-                     className="text-village-green-600 hover:text-village-green-800 ml-2">
+                     className="text-blue-600 hover:text-blue-800 ml-2">
                     {currentSector.officer.email}
                   </a>
                 </p>
