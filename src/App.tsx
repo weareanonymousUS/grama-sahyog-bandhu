@@ -17,6 +17,8 @@ import Chatbot from "./components/Chatbot";
 import MyRequests from "./components/MyRequests";
 import AdminDashboard from "./pages/AdminDashboard";
 import { useAdminAuth } from "./hooks/useAdminAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
@@ -67,8 +69,26 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const AdminRedirect = () => {
+  const { user, isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && user && isAdmin) {
+      navigate('/admin', { replace: true });
+    }
+  }, [user, isAdmin, loading, navigate]);
+
+  return null;
+};
+
 const AppContent = () => {
-  const { user } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
+
+  // Redirect admin users to admin panel on login
+  if (!loading && user && isAdmin) {
+    return <Navigate to="/admin" replace />;
+  }
 
   return (
     <>
@@ -81,6 +101,7 @@ const AppContent = () => {
           path="/" 
           element={
             <ProtectedRoute>
+              <AdminRedirect />
               <WelcomePage />
             </ProtectedRoute>
           } 
