@@ -143,14 +143,16 @@ const AdminDashboard = () => {
           continue;
         }
 
-        if (data) {
+        if (data && Array.isArray(data)) {
           const sectorName = tableName.replace('_requests', '').replace('roads_infrastructure', 'roads');
           sectorStats[sectorName] = data.length;
           totalRequests += data.length;
           
-          data.forEach(item => {
-            if (item.status === 'pending') pendingRequests++;
-            if (item.status === 'resolved') completedRequests++;
+          data.forEach((item: any) => {
+            if (item && typeof item === 'object' && 'status' in item) {
+              if (item.status === 'pending') pendingRequests++;
+              if (item.status === 'resolved') completedRequests++;
+            }
           });
         }
       }
@@ -193,10 +195,14 @@ const AdminDashboard = () => {
           continue;
         }
 
-        if (data) {
+        if (data && Array.isArray(data)) {
           const sectorName = tableName.replace('_requests', '').replace('roads_infrastructure', 'roads');
-          const formattedData = data.map(item => ({
-            ...item,
+          const formattedData = data.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            problem_type: item.problem_type,
+            status: item.status,
+            submitted_at: item.submitted_at,
             sector: sectorName
           }));
           allRequests.push(...formattedData);
