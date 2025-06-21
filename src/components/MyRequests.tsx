@@ -23,6 +23,17 @@ interface RequestItem {
   location?: string;
 }
 
+// Define valid table names as a union type
+type TableName = 
+  | 'agriculture_requests'
+  | 'roads_infrastructure_requests'
+  | 'health_requests'
+  | 'education_requests'
+  | 'electricity_requests'
+  | 'employment_requests'
+  | 'housing_requests'
+  | 'welfare_requests';
+
 const MyRequests = () => {
   const [requests, setRequests] = useState<RequestItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +66,7 @@ const MyRequests = () => {
     if (!user) return;
 
     try {
-      const tableNames = [
+      const tableNames: TableName[] = [
         'agriculture_requests',
         'roads_infrastructure_requests', 
         'health_requests',
@@ -83,7 +94,15 @@ const MyRequests = () => {
         if (data) {
           const sectorName = tableName.replace('_requests', '').replace('roads_infrastructure', 'roads');
           const formattedData = data.map(item => ({
-            ...item,
+            id: item.id,
+            name: item.name,
+            phone: item.phone,
+            email: item.email,
+            problem_type: item.problem_type,
+            status: item.status || 'pending',
+            submitted_at: item.submitted_at || new Date().toISOString(),
+            description: item.description,
+            location: item.location,
             sector: sectorName
           }));
           allRequests.push(...formattedData);

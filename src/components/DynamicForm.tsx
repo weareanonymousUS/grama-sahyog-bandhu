@@ -17,6 +17,17 @@ interface DynamicFormProps {
   onSubmit: () => void;
 }
 
+// Define valid table names as a union type
+type TableName = 
+  | 'agriculture_requests'
+  | 'roads_infrastructure_requests'
+  | 'health_requests'
+  | 'education_requests'
+  | 'electricity_requests'
+  | 'employment_requests'
+  | 'housing_requests'
+  | 'welfare_requests';
+
 const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit }) => {
   const { user } = useAuth();
   const { language } = useLanguage();
@@ -99,7 +110,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
       },
       description: {
         te: 'వివరణ',
-        hi: 'विवरण',
+        hi: 'विवరण',
         en: 'Description'
       },
       landArea: {
@@ -225,8 +236,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const getTableName = (sector: string) => {
-    const tableMap: Record<string, string> = {
+  const getTableName = (sector: string): TableName => {
+    const tableMap: Record<string, TableName> = {
       agriculture: 'agriculture_requests',
       roads: 'roads_infrastructure_requests',
       health: 'health_requests',
@@ -236,7 +247,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sector, problemType, onSubmit
       housing: 'housing_requests',
       welfare: 'welfare_requests'
     };
-    return tableMap[sector] || 'citizen_requests';
+    return tableMap[sector] || 'agriculture_requests';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
