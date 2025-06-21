@@ -102,7 +102,7 @@ const MyRequests = () => {
             status: item.status || 'pending',
             submitted_at: item.submitted_at || new Date().toISOString(),
             description: item.description,
-            location: item.location,
+            location: 'location' in item ? item.location : undefined,
             sector: sectorName
           }));
           allRequests.push(...formattedData);
