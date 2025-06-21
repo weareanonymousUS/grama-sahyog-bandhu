@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -51,7 +50,7 @@ const Chatbot = () => {
       } else if (lowerInput.includes('education') || lowerInput.includes('విద్య') || lowerInput.includes('शिक्षा') ||
                  lowerInput.includes('school') || lowerInput.includes('scholarship') || lowerInput.includes('study')) {
         response = botResponses.education[language];
-      } else if (lowerInput.includes('health') || lowerInput.includes('ఆరోగ্য') || lowerInput.includes('स्वास्थ्य') ||
+      } else if (lowerInput.includes('health') || lowerInput.includes('ఆరోగ్య') || lowerInput.includes('स्वास्थ्य') ||
                  lowerInput.includes('hospital') || lowerInput.includes('medical') || lowerInput.includes('doctor')) {
         response = botResponses.health[language];
       } else {
@@ -78,7 +77,7 @@ const Chatbot = () => {
           setIsOpen(true);
           initChat();
         }}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-village-green-500 hover:bg-village-green-600 shadow-lg z-50"
+        className="fixed bottom-4 right-4 h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-village-green-500 hover:bg-village-green-600 shadow-lg z-50"
         size="icon"
       >
         <MessageCircle className="h-6 w-6 text-white" />
@@ -86,7 +85,9 @@ const Chatbot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-80 h-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 flex flex-col">
+        <div
+          className="fixed bottom-20 right-1/2 translate-x-1/2 sm:right-6 sm:translate-x-0 w-[95vw] max-w-xs sm:w-80 h-[60vh] max-h-[90vh] bg-white rounded-lg shadow-xl border border-gray-200 z-50 flex flex-col"
+        >
           {/* Header */}
           <div className="bg-village-green-500 text-white p-4 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">{t('helpTitle')}</h3>

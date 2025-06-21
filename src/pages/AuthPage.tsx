@@ -6,10 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { Wheat, Phone, Mail, ArrowLeft, Building } from 'lucide-react';
+import { Wheat, Phone, Mail, ArrowLeft, Building, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from '@/components/ui/dropdown-menu';
 
 type AuthMode = 'choose' | 'phone' | 'email' | 'otp';
 type FormMode = 'signin' | 'signup';
@@ -86,17 +91,35 @@ const AuthPage = () => {
       {/* Header */}
       <header className="bg-white shadow-sm border-b p-4" style={{ borderBottomColor: 'rgb(29 78 216)', borderBottomWidth: 1 }}>
         <div className="container mx-auto px-2 sm:px-4 py-0">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+            <div className="flex w-full items-center justify-between">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <Building className="h-8 w-8 text-blue-600" />
                 <div>
                   <h1 className="text-lg sm:text-xl font-bold text-blue-800">Gram Seva</h1>
                   <p className="text-xs sm:text-sm text-blue-600">Citizen Services Portal</p>
                 </div>
               </div>
+              {/* Desktop LanguageSwitcher */}
+              <div className="hidden md:block ml-auto">
+                <LanguageSwitcher />
+              </div>
+              {/* Mobile Hamburger Menu */}
+              <div className="md:hidden flex items-center ml-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Open menu">
+                      <Menu className="w-6 h-6" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <div className="px-2 py-2">
+                      <LanguageSwitcher />
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
-            <LanguageSwitcher />
           </div>
         </div>
       </header>
@@ -136,11 +159,11 @@ const AuthPage = () => {
               <Button
                 onClick={() => setAuthMode('email')}
                 variant="outline"
-                className="w-full text-village-green-700 py-4 sm:py-6 text-base sm:text-lg"
+                className="w-full text-blue-700 border-blue-300 py-4 sm:py-6 text-base sm:text-lg"
                 style={{ borderColor: 'rgb(29 78 216)' }}
               >
                 <Mail className="w-5 h-5 mr-3" />
-                {t('continueWithEmail')}
+                Continue with Email
               </Button>
             </div>
           )}

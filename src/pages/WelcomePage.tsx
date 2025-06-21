@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,7 +5,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useNavigate } from 'react-router-dom';
-import { Phone, MapPin, Building } from 'lucide-react';
+import { Phone, MapPin, Building, Menu } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 
 const WelcomePage = () => {
   const { user, signOut } = useAuth();
@@ -40,7 +46,8 @@ const WelcomePage = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            {/* Desktop actions */}
+            <div className="hidden md:flex items-center space-x-4">
               <LanguageSwitcher />
               <Button 
                 variant="outline" 
@@ -56,6 +63,28 @@ const WelcomePage = () => {
               >
                 {language === 'te' ? 'లాగ్ అవుట్' : language === 'hi' ? 'लॉग आउट' : 'Logout'}
               </Button>
+            </div>
+            {/* Mobile menu */}
+            <div className="md:hidden flex items-center">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" aria-label="Open menu">
+                    <Menu className="w-6 h-6" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <div className="px-2 py-2">
+                    <LanguageSwitcher />
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    {language === 'te' ? 'ప్రొఫైల్' : language === 'hi' ? 'प्रोफाइल' : 'Profile'}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut} className="text-red-600">
+                    {language === 'te' ? 'లాగ్ అవుట్' : language === 'hi' ? 'लॉग आउट' : 'Logout'}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
