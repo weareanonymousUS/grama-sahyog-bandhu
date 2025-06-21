@@ -9,6 +9,110 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_dashboard_stats: {
+        Row: {
+          completed_requests: number | null
+          created_at: string | null
+          date: string | null
+          id: string
+          pending_requests: number | null
+          sector_wise_stats: Json | null
+          total_requests: number | null
+        }
+        Insert: {
+          completed_requests?: number | null
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          pending_requests?: number | null
+          sector_wise_stats?: Json | null
+          total_requests?: number | null
+        }
+        Update: {
+          completed_requests?: number | null
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          pending_requests?: number | null
+          sector_wise_stats?: Json | null
+          total_requests?: number | null
+        }
+        Relationships: []
+      }
+      admin_sessions: {
+        Row: {
+          admin_user_id: string
+          id: string
+          ip_address: string | null
+          is_active: boolean | null
+          login_time: string | null
+          logout_time: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          admin_user_id: string
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean | null
+          login_time?: string | null
+          logout_time?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          admin_user_id?: string
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean | null
+          login_time?: string | null
+          logout_time?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_sessions_admin_user_id_fkey"
+            columns: ["admin_user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_users: {
+        Row: {
+          created_at: string | null
+          department: string
+          employee_id: string
+          id: string
+          is_active: boolean | null
+          permissions: Json | null
+          role: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          department: string
+          employee_id: string
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json | null
+          role?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          department?: string
+          employee_id?: string
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json | null
+          role?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       agriculture_requests: {
         Row: {
           crop_type: string | null

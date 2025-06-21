@@ -15,6 +15,8 @@ import SectorPage from "./components/SectorPage";
 import SuccessPage from "./pages/SuccessPage";
 import Chatbot from "./components/Chatbot";
 import MyRequests from "./components/MyRequests";
+import AdminDashboard from "./pages/AdminDashboard";
+import { useAdminAuth } from "./hooks/useAdminAuth";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,32 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (!user) {
     return <Navigate to="/auth" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
+  
+  if (authLoading || adminLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-blue-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
   }
   
   return <>{children}</>;
@@ -95,6 +123,14 @@ const AppContent = () => {
             <ProtectedRoute>
               <MyRequests />
             </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin" 
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
           } 
         />
         <Route path="*" element={<NotFound />} />
