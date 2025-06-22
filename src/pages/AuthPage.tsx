@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
@@ -108,7 +107,7 @@ const AuthPage = () => {
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <Building className="h-8 w-8 text-blue-600" />
                 <div>
-                  <h1 className="text-lg sm:text-xl font-bold text-blue-800">Grama Seva</h1>
+                  <h1 className="text-lg sm:text-xl font-bold text-blue-800">GRAMSEVA</h1>
                   <p className="text-xs sm:text-sm text-blue-600">Citizen Services Portal</p>
                 </div>
               </div>
@@ -145,7 +144,7 @@ const AuthPage = () => {
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <div className="text-6xl mb-4">🏛️</div>
-                  <h2 className="text-3xl font-bold text-blue-800 mb-4">Grama Seva</h2>
+                  <h2 className="text-3xl font-bold text-blue-800 mb-4">GRAMSEVA</h2>
                   <p className="text-xl text-blue-600 mb-6">Digital Governance Platform</p>
                 </div>
                 
@@ -196,7 +195,7 @@ const AuthPage = () => {
             {/* Mobile Description */}
             <div className="lg:hidden text-center mb-6">
               <div className="text-4xl mb-2">🏛️</div>
-              <h2 className="text-xl font-bold text-blue-800 mb-2">Grama Seva</h2>
+              <h2 className="text-xl font-bold text-blue-800 mb-2">GRAMSEVA</h2>
               <p className="text-sm text-gray-600">Your gateway to digital government services</p>
             </div>
 
